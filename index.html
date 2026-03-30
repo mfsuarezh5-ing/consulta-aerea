@@ -4,15 +4,65 @@
     <meta charset="UTF-8">
     <title>Consulta de Entrenamiento Aéreo</title>
 
-    <!-- Bootstrap (solo diseño, funciona sin problemas) -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a1f44, #1c3d7a);
+            font-family: Arial, sans-serif;
+        }
+
+        /* Marca de agua estilo FAC */
+        body::before {
+            content: "";
+            background: url('https://upload.wikimedia.org/wikipedia/commons/4/4c/Emblema_Fuerza_Aeroespacial_Colombiana.svg') no-repeat center;
+            background-size: 300px;
+            opacity: 0.08;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
+        }
+
+        h2 {
+            color: #0a1f44;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #0a1f44;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #132f63;
+        }
+
+        .btn-success {
+            background-color: #1c3d7a;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #0a1f44;
+        }
+    </style>
 </head>
 
-<body class="bg-light">
+<body>
 
 <div class="container mt-5">
-    <div class="card p-4 shadow">
-        <h2 class="text-center mb-4">Consulta ✈️</h2>
+    <div class="card p-4">
+        <h2 class="text-center mb-4">Consulta de Entrenamiento Aéreo ✈️</h2>
 
         <input type="text" id="cedula" class="form-control mb-3" placeholder="Ingrese número de cédula">
 
@@ -27,14 +77,19 @@ function buscar() {
     const cedula = document.getElementById("cedula").value;
     const resultado = document.getElementById("resultado");
 
-    // 🔥 BASE DE DATOS LOCAL (puedes agregar más personas aquí)
+    if (cedula.trim() === "") {
+        resultado.innerHTML = `<div class="alert alert-warning">Ingrese una cédula</div>`;
+        return;
+    }
+
+    // 🔥 BASE DE DATOS LOCAL
     const datos = {
         "1019603560": {
             nombre: "Manuel Suarez",
             certificados: [
                 {
                     nombre: "Certificado EPS",
-                    archivo: "certificados/1019603560_eps.pdf"
+                    archivo: "https://mfsuarezh5-ing.github.io/consulta-aerea/certificados/1019603560_eps.pdf"
                 }
             ]
         }
@@ -44,7 +99,7 @@ function buscar() {
         const persona = datos[cedula];
 
         let html = `
-            <h4>${persona.nombre}</h4>
+            <h4 class="text-center">${persona.nombre}</h4>
             <ul class="list-group mt-3">
         `;
 
@@ -71,6 +126,13 @@ function buscar() {
         `;
     }
 }
+
+// 🔥 Buscar con ENTER
+document.getElementById("cedula").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        buscar();
+    }
+});
 </script>
 
 </body>
